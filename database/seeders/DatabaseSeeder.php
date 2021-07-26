@@ -17,36 +17,54 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        User::factory()->count(20)->create();
+        User::factory(10)->create();
 
         $board1 = Board::create([
-            'title'=> 'Grocieries', 'color' => 'teal', 'owner_id' => 1
+            'title' => 'Grocieries', 'color' => 'teal', 'owner_id' => 1
         ]);
         $board2 = Board::create([
-            'title'=> 'Work', 'color' => 'orange', 'owner_id' => 2
+            'title' => 'Work', 'color' => 'orange', 'owner_id' => 2
         ]);
         $board3 = Board::create([
-            'title'=> 'Hobby', 'color' => 'indigo', 'owner_id' => 1
+            'title' => 'Hobby', 'color' => 'indigo', 'owner_id' => 1
         ]);
 
-        collect([$board1, $board2, $board3])->each(function (Board $board)  {
+        collect([$board1, $board2, $board3])->each(function (Board $board) {
             $list1 = CardList::create([
-                'title'=>'To-Do', 'board_id' => $board->id
+                'title' => 'To-Do',
+                'board_id' => $board->id
             ]);
             $list2 = CardList::create([
-                'title'=>'In progress', 'board_id' => $board->id
+                'title' => 'In Progress',
+                'board_id' => $board->id
             ]);
             $list3 = CardList::create([
-                'title'=>'Done', 'board_id' => $board->id
+                'title' => 'Done',
+                'board_id' => $board->id
             ]);
 
             collect([$list1, $list2, $list3])->each(function (CardList $list) use ($board) {
                 $order = 1;
-                collect(['By groceries', 'Take the dog for a walk', 'Pay the bills', 'Get the car fixed', 'White novel', 'Buy food', 'Paint a picture', 'Create a course'])->random(random_int(2, 5))->each(function (string  $task) use($board, $list, $order) {
-                    $list->cards()->save(
-                        Card::make(['title' => $task, 'owner_id' => $board->owner_id, 'order' => $order++])
-                    );
-                });
+
+                collect([
+                    'Buy groceries',
+                    'Take the dog for a walk',
+                    'Pay the bills',
+                    'Get the car fixed',
+                    'Write novel',
+                    'Buy food',
+                    'Paint a picture',
+                    'Create a course'
+                ])->random(random_int(2, 5))
+                    ->each(function (string $task) use ($board, $list, &$order) {
+                        $list->cards()->save(
+                            Card::make([
+                                'title' => $task,
+                                'owner_id' => $board->owner_id,
+                                'order' => $order++
+                            ])
+                        );
+                    });
             });
         });
     }

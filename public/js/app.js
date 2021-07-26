@@ -7570,7 +7570,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var graphql_tag__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! graphql-tag */ "./node_modules/graphql-tag/lib/index.js");
 /* harmony import */ var _components_List__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/List */ "./resources/js/components/List.vue");
+var _templateObject;
+
+function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+//
 //
 //
 //
@@ -7589,9 +7595,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
     List: _components_List__WEBPACK_IMPORTED_MODULE_0__.default
+  },
+  apollo: {
+    board: {
+      query: (0,graphql_tag__WEBPACK_IMPORTED_MODULE_1__.default)(_templateObject || (_templateObject = _taggedTemplateLiteral(["query ($id: ID!) {\n  board(id: $id) {\n    title\n    color\n    lists {\n      id\n      title\n      cards {\n        id\n        title\n        order\n      }\n    }\n  }\n}\n\n            "]))),
+      variables: {
+        id: 1
+      }
+    }
   }
 });
 
@@ -7613,7 +7628,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: "Card"
+  name: "Card",
+  props: {
+    card: Object
+  }
 });
 
 /***/ }),
@@ -7663,13 +7681,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
     Card: _Card__WEBPACK_IMPORTED_MODULE_0__.default,
     CardAddButton: _CardAddButton__WEBPACK_IMPORTED_MODULE_1__.default
+  },
+  props: {
+    list: Object
   }
 });
 
@@ -33917,15 +33937,21 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "h-full flex flex-1 flex-col items-stretch" }, [
         _c("div", { staticClass: "mx-4 mb-2 text-white font-bold text-lg" }, [
-          _vm._v("The board title goes here")
+          _vm.$apollo.queries.board.loading
+            ? _c("span", [_vm._v("Loading...")])
+            : _c("span", [_vm._v(_vm._s(_vm.board.title))])
         ]),
         _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "flex flex-1 items-start overflow-auto mx-4" },
-          [_c("List"), _vm._v(" "), _c("List"), _vm._v(" "), _c("List")],
-          1
-        )
+        _vm.board
+          ? _c(
+              "div",
+              { staticClass: "flex flex-1 items-start overflow-auto mx-4" },
+              _vm._l(_vm.board.lists, function(list) {
+                return _c("List", { key: list.id, attrs: { list: list } })
+              }),
+              1
+            )
+          : _vm._e()
       ])
     ]
   )
@@ -33983,7 +34009,7 @@ var render = function() {
       staticClass:
         "bg-white card rounded-sm p-2 cursor-pointer text-sm hover:bg-gray-100 mb-2"
     },
-    [_vm._v("xxx")]
+    [_vm._v(_vm._s(_vm.card.title))]
   )
 }
 var staticRenderFns = []
@@ -34052,31 +34078,22 @@ var render = function() {
     "div",
     { staticClass: "bg-gray-300 rounded-sm p-2 mr-2 list" },
     [
-      _vm._m(0),
+      _c("div", { staticClass: "flex justify-between" }, [
+        _c("div", { staticClass: "text-gray-800 pl-2 pb-2 font-bold" }, [
+          _vm._v(_vm._s(_vm.list.title))
+        ])
+      ]),
       _vm._v(" "),
-      _c("Card"),
-      _vm._v(" "),
-      _c("Card"),
-      _vm._v(" "),
-      _c("Card"),
+      _vm._l(_vm.list.cards, function(card) {
+        return _c("Card", { key: card.id, attrs: { card: card } })
+      }),
       _vm._v(" "),
       _c("CardAddButton")
     ],
-    1
+    2
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "flex justify-between" }, [
-      _c("div", { staticClass: "text-gray-800 pl-2 pb-2 font-bold" }, [
-        _vm._v("List title")
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 

@@ -17,7 +17,7 @@ class CreateCardsTable extends Migration
             $table->id();
             $table->string('title');
             $table->smallInteger('order');
-            $table->foreignId('list_id')->constrained('card_list');
+            $table->foreignId('list_id')->constrained('card');
             $table->foreignId('owner_id')->constrained('users');
             $table->timestamps();
         });
