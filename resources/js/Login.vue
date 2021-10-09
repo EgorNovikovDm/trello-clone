@@ -56,15 +56,20 @@ export default {
        async authenticate() {
            this.errors = [];
            try {
-               await this.$apollo.mutate({
+              const response = await this.$apollo.mutate({
                    mutation: Login,
                    variables: {
                        email: this.email,
                        password: this.password
                    }
-               })
+               });
+              const user = response.data?.login ;
+              if(user) {
+                  this.$store.dispatch('setLoggedIn', true);
+                  this.$store.commit("setUser", user);
+                  this.$router.push({name: "board"});
+              }
            } catch (err) {
-               console.log(gqlErrors(err))
                 this.errors = gqlErrors(err)
            }
         }
